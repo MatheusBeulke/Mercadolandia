@@ -1,2 +1,4 @@
 # Mercadolandia
- Jogo
+Nome do Jogo: Mercadolandia
+
+Feito em: Python
