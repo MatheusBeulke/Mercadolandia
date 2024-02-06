@@ -1,0 +1,80 @@
+1.7:	
+	Sitema de Habilidade
+	Habilidade (Fazer mais venda)
+	Adicionando '[] teclas'
+	Adicionando móveis
+
+1.8:	
+	Adicionando Mapa(Estados) 
+	Estado de Santa Catarina e São Paulo
+	Adicionando Imóveis: Açougue, Padaria, Loja de eletrônica e SuperMercado
+
+1.9:
+	2 Habilidades (Preço reduzido) e (Maior lucro nas vendas)
+	Sistema de compra de diamante por dinheiro e vice-versa
+	Sistema de Level
+
+Versão atual 2.0:
+	Adicionando limite de itens nos móveis 
+	habilidade (Ganhar mais de experiencia)
+	Sistema de Level máximo nas habilidades
+	Adicionando depósito nos imóveis 
+
+2.1:
+	Sistema de Evolução:
+		Evoluir tamanho do Imóvel
+		Evoluir tamanho do Depósito
+	Sistema para mostrar informações do imóvel 
+
+2.2:
+	atributos para cada lv:
+		aumentar o lv maximo de habilidade
+	melhorar informacoes do imovel (funcionarios)
+	melhorar habilidade de reduzir preco e maior lucro para cada imovel 
+	melhorar a estrutura do código
+	# updade nos moveis
+	sistema de compra de imovel e aluguel de imovel
+	pagamento de aluguel, energia e funcionario
+	conquistas (raridade e dima):
+		comum: {primeira venda, primeiro imóvel, 10mil reais, level.5}
+		raro: {1000 vendas, 4 imóveis, 50mil reais, level.10}
+		épico: {10mil vendas, 8 imóveis, 100mil reais, level.15}
+		lendário: {50mil vendas, 12 imóveis, 150mil reais, level.20}
+	
+próximas atualizações (idéias):
+
+sistema de venda:
+	busca por itens
+	avaliação do imóvel
+
+Estados:
+	Amazonas
+	Pernanbuco
+	Goiás
+
+imóveis:
+	fazenda (compra e venda de animais) apenas em alguns Estados
+	pecuaria
+	loja de móveis 
+	plantação (plantil) apenas em alguns Estados:
+		plantação: 
+			arroz, feijao, cebola
+			fruta (sc (goiaba, jabuticaba e tangerina)
+
+fazenda:
+	vaca (leite)
+	boi (carne)
+	galinha (carne e ovo)
+	porco (carne e bacon)
+
+pecuaria:
+	lula, atum, caviar
+
+dinheiro:
+	Emprestimo
+	Investimentos (dinheiro)
+	roleta de premio
+
+
+hibilidades:
+	habilidade de maior investimento
