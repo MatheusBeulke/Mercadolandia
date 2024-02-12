@@ -14,13 +14,12 @@
 	Sistema de compra de diamante por dinheiro e vice-versa
 	Sistema de Level
 
-Versão atual 2.0:
 	Adicionando limite de itens nos móveis 
 	habilidade (Ganhar mais de experiencia)
 	Sistema de Level máximo nas habilidades
 	Adicionando depósito nos imóveis 
 
-2.1:
+Versão atual 2.1:
 	Sistema de Evolução:
 		Evoluir tamanho do Imóvel
 		Evoluir tamanho do Depósito
