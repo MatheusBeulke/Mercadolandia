@@ -6,7 +6,7 @@ precohabilidade = {'precohavendas': 5, 'precohapreco': 5, 'precohalucro': 5, 'pr
 levelmaximohabi = {'lvhv': 10, 'lvhp': 5, 'lvhl': 10, 'lvhe': 10}
 maisexp = 0
 
-dinheiro = 20000
+dinheiro = 8000
 diamante = 0
 nivel = {'level': 1, 'qtdeexp': 0, 'uplevel': 3000}
 
