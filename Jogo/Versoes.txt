@@ -14,6 +14,7 @@
 	Sistema de compra de diamante por dinheiro e vice-versa
 	Sistema de Level
 
+2.0:
 	Adicionando limite de itens nos móveis 
 	habilidade (Ganhar mais de experiencia)
 	Sistema de Level máximo nas habilidades
