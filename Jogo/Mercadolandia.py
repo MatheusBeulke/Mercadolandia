@@ -1,12 +1,12 @@
-# Versão 2.1
-
 from time import sleep
+import BDP
+from Versao2_2.Jogo_2_2 import ComprarInicial
 from math import trunc
 from random import randint, choice
-import BDP
 
 
 def boasvinda():
+
     print('Bem-Vindo ao Mercadolândia')
     JogoInicio()
 
@@ -16,11 +16,12 @@ def JogoInicio():
         print('Funções de controle:')
         print('[A] Visualizar mapa')
         print('[B] Abrir Mercado')
-        print('[C] Comprar Moedas')
-        print('[D] Informações')
+        print('[C] Comprar Automóvel')
+        print('[D] Comprar Moedas')
+        print('[E] Informações')
         while True:
             tecla = input('Tecla: ').title().strip()
-            if tecla in 'ABCD':
+            if tecla in 'ABCDE':
                 break
             else:
                 print('\033[31mErro:  \033[mOpção inválida, tente novamente')
@@ -34,10 +35,50 @@ def JogoInicio():
             Abrir_Mercados()
 
         elif tecla in 'C':
-            comprarmoeda()
+            comprarautomovel()
 
         elif tecla in 'D':
+            comprarmoeda()
+
+        elif tecla in 'E':
             informacoes()
+
+
+def comprarautomovel():
+    while True:
+        print('Loja Automóveis')
+        for pos, i in enumerate(BDP.caminhao):
+            print(f'[{pos}] {BDP.caminhao[pos][0]} = R${BDP.caminhao[pos][2]}')
+
+        print('[C] Voltar')
+        while True:
+            tecla = str(input('Tecla: ')).strip().upper()
+            if tecla in BDP.ncaminhao or tecla in 'C':
+                break
+            else:
+                print('\033[31mErro:  \033[mOpção inválida, tente novamente')
+
+        if tecla in 'C':
+            break
+
+        else:
+            busca0 = BDP.ncaminhao.index(tecla)
+            busca = BDP.caminhao[busca0][0]
+            preco = BDP.caminhao[busca0][2]
+            if BDP.qtdecaminhao[busca] == 0:
+                if BDP.dinheiro >= preco:
+                    BDP.qtdecaminhao[busca] += 1
+                    if BDP.caminhao[busca0][1] > BDP.meucaminhao:
+                        BDP.meucaminhao = BDP.caminhao[busca0][1]
+                    print(f'Você comprou um {busca} por R${preco}')
+                    sleep(2)
+
+                else:
+                    print('\033[33mErro: \033[mDinheiro insuficiente.')
+                    sleep(1)
+            else:
+                print('\033[33mErro: \033[mVocê já tem esse caminhão.')
+                sleep(1)
 
 
 def comprarmoeda():
@@ -52,6 +93,7 @@ def comprarmoeda():
             print('\033[31mErro:  \033[mOpção inválida, tente novamente')
 
     if tecla1 in '0':
+        print('Comprar diamante')
         print('1 diamante = R$500')
         qtdemaxima = BDP.dinheiro / 500
         print('Compra máxima de {:.0f} diamante'.format(trunc(qtdemaxima)))
@@ -72,10 +114,11 @@ def comprarmoeda():
             print('Você comprou {} diamante por R${}'.format(qtde, total))
             sleep(1)
         else:
-            print('\033[33mErro: \033[mDiamante insuficiente.')
+            print('\033[33mErro: \033[mDinheiro insuficiente.')
 
     elif tecla1 in '1':
         while True:
+            print('Comprar dinheiro')
             print('[0] R$500 = 1 diamante')
             print('[1] R$2500 = 5 diamante')
             print('[2] R$5000 = 10 diamante')
@@ -120,15 +163,16 @@ def comprarmoeda():
 
 def informacoes():
     while True:
-        print('[0] Mostrar saldo.')
-        print('[1] Mostrar imóveis.')
-        print('[2] Mostrar Level.')
-        print('[3] Mostrar habilidades.')
-        print('[4] Mostrar conquistar.')
+        print('[0] Mostrar Saldo')
+        print('[1] Mostrar Imóveis')
+        print('[2] Mostrar Level')
+        print('[3] Mostrar Habilidades')
+        print('[4] Mostrar Atributos')
+        print('[5] Mostrar Conquistar')
         print('[C] Voltar.')
         while True:
             tecla2 = input('Tecla: ').strip().upper()
-            if tecla2 in '01234C':
+            if tecla2 in '012345C':
                 break
             else:
                 print('\033[31mErro:  \033[mOpção inválida, tente novamente')
@@ -180,9 +224,10 @@ def informacoes():
                         break
 
                     elif tecla4 in '0':
-                        print(f'Depósito: Lv.{BDP.lvevolucaoimovel[buscad]}')
-                        print(f'Espaço: Lv.{BDP.lvevolucaoimovel[buscam]}')
-                        print(f'Espaço ocupado: {BDP.tamanhoocupado[buscam]}/{BDP.limiteevolucaoimovel[buscam]}')
+                        print('Dépoisto: Lv.{}'.format(BDP.lvevolucaoimovel[buscad], ))
+                        print('Espaço: Lv.{}'.format(BDP.lvevolucaoimovel[buscam]))
+                        print('Espaço ocupado: {}/{}'.format(BDP.tamanhoocupado[buscam],
+                                                             BDP.limiteevolucaoimovel[buscam]))
                         print('Lucro: R${:.2f}'.format(BDP.lucro[buscam]))
                         sleep(3)
 
@@ -250,7 +295,10 @@ def informacoes():
             habilidades()
 
         elif tecla2 in '4':
-            print('PRÓXIMA ATUALIZAÇÃO! 2.2')
+            Atributo()
+
+        elif tecla2 in '5':
+            print('Sem Nada')
 
 
 def habilidades():
@@ -270,21 +318,18 @@ def habilidades():
 
         if tecla1 in '0':
             print('Habilidade de vendas Lv. {}'.format(BDP.habilidades['Habilidade de vendas']))
-            print(f'Habilidade de reduzir preco Lv.{BDP.habilidades["Habilidade de reduzir preco"]}')
             print('Habilidade de lucro Lv.{}'.format(BDP.habilidades['Habilidade de lucro']))
-            print('Habilidade de ganhar mais exp Lv.{}'.format(BDP.habilidades['Habilidade de ganhar mais exp']))
+            print(f'Habilidade de ganhar mais experiência Lv.{BDP.habilidades["Habilidade de ganhar mais exp"]}')
             sleep(2)
 
         elif tecla1 in '1':
             print('Melhorar:')
             valor_habilidadev = BDP.precohabilidade['precohavendas'] * BDP.habilidades['Habilidade de vendas']
-            valor_habilidadep = BDP.precohabilidade['precohapreco'] * BDP.habilidades['Habilidade de reduzir preco']
             valor_habilidadel = BDP.precohabilidade['precohalucro'] * BDP.habilidades['Habilidade de lucro']
             valor_habilidadee = BDP.precohabilidade['precohaexp'] * BDP.habilidades['Habilidade de ganhar mais exp']
-            print('[0] Habilidade de vendas = {} Diamantes (+1 Venda)'.format(valor_habilidadev))
-            print('[1] Habilidade de reduzir preco = {} diamantes (-0.50 Centavos)'.format(valor_habilidadep))
-            print('[2] Habilidade de lucro = {} diamantes (+2 Reais)'.format(valor_habilidadel))
-            print('[3] Habilidade de ganhar mais exp = {} diamantes (+5 Expêriencia)'.format(valor_habilidadee))
+            print('[0] Habilidade de vendas = {} Diamantes (+1 venda)'.format(valor_habilidadev))
+            print('[1] Habilidade de lucro = {} diamantes (+2 reais)'.format(valor_habilidadel))
+            print('[2] Habilidade de ganhar mais experiência = {} diamantes (+5 exp)'.format(valor_habilidadee))
             print('[C] Voltar.')
             while True:
                 tecla2 = input('Tecla: ').title()
@@ -295,71 +340,44 @@ def habilidades():
 
             if tecla2 in '0':
                 if BDP.diamante >= valor_habilidadev:
-                    if BDP.habilidades['Habilidade de vendas'] == 10:
+                    if BDP.habilidades['Habilidade de vendas'] == BDP.levelmaximohabi['lvhv']:
                         print('\033[33mErro: \033[mHabilidade no level máximo')
                         sleep(1)
-
                     else:
                         BDP.habilidades['Habilidade de vendas'] += 1
                         BDP.diamante -= valor_habilidadev
-                        print('Você teve um gasto de {} diamantes com o aumento de habilidade.'.format
-                              (valor_habilidadev))
-                        print('Você aumentou o Lv. de habilidade de vendas.')
+                        print('Você melhorou a habilidade de venda para o lv.{}'.format(
+                            BDP.habilidades['Habilidade de vendas']))
                         sleep(2)
-
                 else:
                     print('\033[33mErro:  \033[mDiamante insuficiente.')
 
             elif tecla2 in '1':
-                if BDP.diamante >= valor_habilidadep:
-                    if BDP.habilidades['Habilidade de reduzir preco'] == 5:
+                if BDP.diamante >= valor_habilidadel:
+                    if BDP.habilidades['Habilidade de lucro'] == BDP.levelmaximohabi['lvhl']:
                         print('\033[33mErro: \033[mHabilidade no level máximo')
                         sleep(1)
-
                     else:
-                        BDP.habilidades['Habilidade de reduzir preco'] += 1
-                        BDP.diamante -= valor_habilidadep
-                        print('Você teve um gasto de {} diamantes com o aumento de habilidade.'.format
-                              (valor_habilidadep))
-                        print('Você aumentou o Lv. de habilidade de reduzir preco.')
+                        BDP.habilidades['Habilidade de lucro'] += 1
+                        BDP.diamante -= valor_habilidadel
+                        print('Você melhorou a habilidade de lucro para o lv.{}'.format(
+                            BDP.habilidades['Habilidade de lucro']))
                         sleep(2)
-
                 else:
                     print('\033[33mErro: \033[mDiamante insuficiente.')
 
             elif tecla2 in '2':
-                if BDP.diamante >= valor_habilidadel:
-                    if BDP.habilidades['Habilidade de lucro'] == 10:
-                        print('\033[33mErro: \033[mHabilidade no level máximo')
-                        sleep(1)
-
-                    else:
-                        BDP.habilidades['Habilidade de lucro'] += 1
-
-                        BDP.diamante -= valor_habilidadel
-                        print('Você teve um gasto de {} diamantes com o aumento de habilidade.'.format(
-                            valor_habilidadel))
-                        print('Você aumentou o Lv. de habilidade de lucro.')
-                        sleep(2)
-
-                else:
-                    print('\033[33mErro: \033[mDiamante insuficiente.')
-
-            elif tecla2 in '3':
                 if BDP.diamante >= valor_habilidadee:
-                    if BDP.habilidades['Habilidade de ganhar mais exp'] == 10:
+                    if BDP.habilidades['Habilidade de ganhar mais exp'] == BDP.levelmaximohabi['lvhe']:
                         print('\033[33mErro: \033[mHabilidade no level máximo')
                         sleep(1)
-
                     else:
                         BDP.habilidades['Habilidade de ganhar mais exp'] += 1
                         BDP.diamante -= valor_habilidadee
                         BDP.maisexp += 5
-                        print('Você teve um gasto de {} diamantes com o aumento de habilidade.'.format
-                              (valor_habilidadee))
-                        print('Você aumentou o Lv. de habilidade de ganhar mais exp.')
+                        print('Você melhorou a habilidade de experiência para o lv.{}'.format(
+                            BDP.habilidades['Habilidade de ganhar mais exp']))
                         sleep(2)
-
                 else:
                     print('\033[33mErro: \033[mDiamante insuficiente.')
 
@@ -369,11 +387,93 @@ def sistemalevel():
         if BDP.nivel['qtdeexp'] >= BDP.nivel['uplevel']:
             BDP.nivel['uplevel'] *= 2.5
             BDP.nivel['level'] += 1
+            ganhoa = BDP.nivel['level'] * 1
+            BDP.qtdeatributos += ganhoa
             print('Up level {}'.format(BDP.nivel['level']))
-            sleep(1.5)
-
+            print(f'Você ganhou {ganhoa} ponto de Atributo')
+            sleep(2)
         else:
             break
+
+
+def Atributo():
+    while True:
+        print('[0] Mostrar Atributos.')
+        print('[1] Melhorar Atributos.')
+        print('[C] Voltar.')
+        while True:
+            tecla1 = input('Tecla: ').title()
+            if tecla1 in '01C':
+                break
+            else:
+                print('\033[31mErro:  \033[mOpção inválida, tente novamente')
+
+        if tecla1 in 'C':
+            break
+
+        elif tecla1 in '0':
+            print('Atributo de vendas Lv. {}'.format(BDP.atributos['Atributo de vendas']))
+            print('Atributo de lucro Lv.{}'.format(BDP.atributos['Atributo de lucro']))
+            print('Atributo de ganhar mais experiência Lv.{}'.format(BDP.atributos['Atributo de exp']))
+            print(f'Atributo de aumentar o level máximo das habilidades Lv.{BDP.atributos["Atributo level maximo ha"]}')
+            sleep(2)
+
+        elif tecla1 in '1':
+            print('Melhorar: ')
+            print('[0] Atributo de vendas = {} pontos (+1 venda)'.format(BDP.atributos['Atributo de vendas']))
+            print('[1] Atributo de lucro = {} pontos (+2 reais)'.format(BDP.atributos['Atributo de lucro']))
+            print('[2] Atributo de experiência = {} pontos (+5 exp)'.format(BDP.atributos['Atributo de exp']))
+            print(f'[3] Atributo de aumentar o level máximo das habilidades ='
+                  f' {BDP.atributos["Atributo level maximo ha"]} pontos (+1 level)')
+            print('[C] Voltar')
+            while True:
+                print('Quantidade de Atributos: {} pontos'.format(BDP.qtdeatributos))
+                tecla2 = input('Tecla: ').upper().strip()
+                if tecla2 in '0123C':
+                    break
+                else:
+                    print('\033[31mErro:  \033[mOpção inválida, tente novamente')
+
+            if tecla2 in 'C':
+                break
+
+            elif tecla2 in '0':
+                if BDP.qtdeatributos >= BDP.atributos['Atributo de vendas']:
+                    BDP.atributos['Atributo de vendas'] += 1
+                    BDP.qtdeatributos -= BDP.atributos['Atributo de vendas']
+                    print('Você melhorou o atributo de vendas para o lv.{}'.format(BDP.atributos['Atributo de vendas']))
+                else:
+                    print('\033[33mErro: \033[mpontos de atributo insuficiente.')
+
+            elif tecla2 in '1':
+                if BDP.qtdeatributos >= BDP.atributos['Atributo de lucro']:
+                    BDP.atributos['Atributo de lucro'] += 1
+                    BDP.qtdeatributos -= BDP.atributos['Atributo de lucro']
+                    print('Você melhorou o atributo de lucro para o lv.{}'.format(BDP.atributos['Atributo de lucro']))
+                else:
+                    print('\033[33mErro: \033[mpontos de atributo insuficiente.')
+
+            elif tecla2 in '2':
+                if BDP.qtdeatributos >= BDP.atributos['Atributo de exp']:
+                    BDP.atributos['Atributo de exp'] += 1
+                    BDP.qtdeatributos -= BDP.atributos['Atributo de exp']
+                    BDP.maisexp += 5
+                    print(f'Você melhorou o atributo de experiência para o lv.{BDP.atributos["Atributo de exp"]}')
+                else:
+                    print('\033[33mErro: \033[mpontos de atributo insuficiente.')
+
+            elif tecla2 in '3':
+                if BDP.qtdeatributos >= BDP.atributos['Atributo level maximo ha']:
+                    BDP.atributos['Atributo level maximo ha'] += 1
+                    BDP.qtdeatributos -= BDP.atributos['Atributo level maximo ha']
+                    BDP.levelmaximohabi['lvhv'] += 1
+                    BDP.levelmaximohabi['lvhl'] += 1
+                    BDP.levelmaximohabi['lvhe'] += 1
+                    print(f'Você melhorou o atributo de aumentar o level máximo das habilidades para'
+                          f' o lv.{BDP.atributos["Atributo level maximo ha"]}')
+                else:
+                    print('\033[33mErro: \033[mpontos de atributo insuficiente.')
+            sleep(2)
 
 
 def Abrir_Mercados():
@@ -403,8 +503,8 @@ def Abrir_Mercados():
                     print('\033[31mErro:  \033[mOpção inválida, tente novamente')
 
             if tecla2 in '0':
-                print('Qual será seu imóvel?')
-                print('Tipos de Imóveis:')
+                print('Qual será seu mercado?')
+                print('Tipos de Mercados:')
                 for i in range(len(BDP.tipo_de_mercado)):
                     print('[{}] {} = R${}.'.format(i, BDP.tipo_de_mercado[i], BDP.preco_mercado[i]))
                 print('[C] Voltar.')
@@ -444,7 +544,7 @@ def Abrir_Mercados():
                         BDP.SCSPTipos_Deposito_Informacoes.append(buscad)
                         preco = BDP.preco_mercado[busca]
                         BDP.dinheiro -= preco
-                        print('Você teve um gasto de R${} com o imóvel.'.format(preco))
+                        print('Voce teve um gasto de R${} com o imóvel.'.format(preco))
                         sleep(1.5)
                     else:
                         print('\033[33mErro: \033[mDinheiro insuficiente.')
@@ -499,7 +599,9 @@ def Abrir_Mercados():
                         buscatm1 = BDP.SCTipo_Mercado[buscatm]
                         buscanome = BDP.SCnumeracao_estado.index(tecla3)
                         buscanome1 = BDP.SCNome_Mercado[buscanome]
-                        print('Entrando no Imóvel: \033[36m{} \033[m'.format(buscanome1))
+                        print(f'\rIndo para {buscanome1}...', end='')
+                        sleep(10)
+                        print('\nEntrando no Imóvel: \033[36m{} \033[m'.format(buscanome1))
                         sleep(2)
                         SCDentro_Mercado(buscatm1, buscanome1)
 
@@ -551,6 +653,9 @@ def SCDentro_Mercado(buscatm1, buscanome1):
                     break
 
                 elif tecla1 in '0':
+                    print(f'\rIndo para Loja de Móveis...', end='')
+                    print('')
+                    sleep(10)
                     if Tipo_Mercado in 'Acougue':
                         sclojamoveis(buscatm1, buscanome1)
                     elif Tipo_Mercado in 'Padaria':
@@ -561,6 +666,9 @@ def SCDentro_Mercado(buscatm1, buscanome1):
                         sclojamoveis(buscatm1, buscanome1)
 
                 elif tecla1 in '1':
+                    print(f'\rIndo para Mercado do Zé...', end='')
+                    print('')
+                    sleep(10)
                     if Tipo_Mercado in 'Acougue':
                         scmercado(buscatm1, buscanome1)
                     elif Tipo_Mercado in 'Padaria':
@@ -583,7 +691,7 @@ def SCDentro_Mercado(buscatm1, buscanome1):
                 scfuncionarios(buscatm1)
 
         elif tecla in '2':
-            comprarmoeda()
+            ComprarInicial.comprarmoeda()
 
         elif tecla in '3':
             if Tipo_Mercado in 'Acougue':
@@ -628,20 +736,20 @@ def SCDentro_Mercado(buscatm1, buscanome1):
 
                     elif Tipo_Mercado in 'Padaria':
                         for p, moveispadaria in enumerate(BDP.scmoveispadaria):
-                            print(f'{moveispadaria} = {BDP.scqtdemoveispadaria[moveispadaria]} '
+                            print(f'{moveispadaria} = {BDP.scqtdemoveispadaria[moveispadaria]}'
                                   f'({BDP.sclimiteitensmoveispadaria[p]} produtos) ({BDP.scespacomoveispadaria[p]}'
                                   f' espaço)')
 
                     elif Tipo_Mercado in 'Loja de Eletronica':
                         for p, moveiseletronica in enumerate(BDP.scmoveiseletronica):
-                            print(f'{moveiseletronica} = {BDP.scqtdemoveiseletronica[moveiseletronica]} '
+                            print(f'{moveiseletronica} = {BDP.scqtdemoveiseletronica[moveiseletronica]}'
                                   f'({BDP.sclimiteitensmoveiseletronica[p]} produtos)'
                                   f'({BDP.scespacomoveiseletronico[p]} espaço)')
 
                     elif Tipo_Mercado in 'SuperMercado':
                         for p, moveissm in enumerate(BDP.scmoveissupermercado):
-                            print(f'{moveissm} = {BDP.scqtdemoveissupermercado[moveissm]} '
-                                  f'({BDP.sclimiteitensmoveissm[p]} produtos) ({BDP.scespacomoveissm[p]} espaço')
+                            print(f'{moveissm} = {BDP.scqtdemoveissupermercado[moveissm]}'
+                                  f' ({BDP.sclimiteitensmoveissm[p]} produtos) ({BDP.scespacomoveissm[p]} espaço')
                     sleep(2)
 
                 elif tecla2 in '2':
@@ -726,11 +834,13 @@ def SCDentro_Mercado(buscatm1, buscanome1):
 def scvendaacougue():
     while True:
         sorteio = randint(0, 2)
-        qtdevendaslevel = BDP.habilidades['Habilidade de vendas'] * 1
-        precoreduzido = BDP.habilidades['Habilidade de reduzir preco'] * 0.50
-        lucromaior = BDP.habilidades['Habilidade de lucro'] * 2
+        qtdevendashab = BDP.habilidades['Habilidade de vendas'] * 1
+        qtdevendasatri = BDP.atributos['Atributo de vendas'] * 1
+        lucrohab = BDP.habilidades['Habilidade de lucro'] * 2
+        lucroatri = BDP.atributos['Atributo de lucro'] * 2
         scvendas = BDP.scqtdemoveisacougue['Caixa'] * 2
-        scqtdevendas = qtdevendaslevel + scvendas
+        qtdelucro = lucrohab + lucroatri
+        scqtdevendas = qtdevendashab + qtdevendasatri + scvendas
         if BDP.scqtdemoveisacougue['Caixa'] >= 1:
             if BDP.scqtdefuncoesacougue['Caixa'] >= 1:
                 if BDP.scqtdefuncoesacougue['Acougueiro'] >= 1:
@@ -742,26 +852,26 @@ def scvendaacougue():
                             if BDP.scqtdeprodutoacougue[busca1] >= scqtdevendas:
                                 BDP.scqtdeprodutoacougue[busca1] -= scqtdevendas
                                 BDP.scqtdeprovendasacougue[busca1] += scqtdevendas
-                                precov = (BDP.scprecoacouguev[busca] + lucromaior) * scqtdevendas
+                                precov = (BDP.scprecoacouguev[busca] + qtdelucro) * scqtdevendas
                                 BDP.dinheiro += precov
-                                npv = BDP.scprecoacouguev[busca] + lucromaior
-                                npc = BDP.scprecoacouguec[busca] - precoreduzido
+                                npv = BDP.scprecoacouguev[busca] + qtdelucro
+                                npc = BDP.scprecoacouguec[busca]
                                 lucro = (npv - npc) * scqtdevendas
                                 BDP.lucro['scacougue'] += lucro
                                 somaexp = (20 + BDP.maisexp) * scqtdevendas
                                 BDP.nivel['qtdeexp'] += somaexp
-                                print('Você vendeu {} {} por R${:.2f}'.format(scqtdevendas, busca1, precov))
-                                print('você teve um lucro de R${:.2f}'.format(lucro))
-                                print('Você ganhou {} exp'.format(somaexp))
+                                print('Voce vendeu {} {} por R${:.2f}'.format(scqtdevendas, busca1, precov))
+                                print('voce teve um lucro de R${:.2f}'.format(lucro))
+                                print('Voce ganhou {} exp'.format(somaexp))
                                 sleep(4)
                             else:
                                 scqtdevendas = BDP.scqtdeprodutoacougue[busca1]
                                 BDP.scqtdeprodutoacougue[busca1] -= scqtdevendas
                                 BDP.scqtdeprovendasacougue[busca1] += scqtdevendas
-                                precov = (BDP.scprecoacouguev[busca] + lucromaior) * scqtdevendas
+                                precov = (BDP.scprecoacouguev[busca] + qtdelucro) * scqtdevendas
                                 BDP.dinheiro += precov
-                                npv = BDP.scprecoacouguev[busca] + lucromaior
-                                npc = BDP.scprecoacouguec[busca] - precoreduzido
+                                npv = BDP.scprecoacouguev[busca] + qtdelucro
+                                npc = BDP.scprecoacouguec[busca]
                                 lucro = (npv - npc) * scqtdevendas
                                 BDP.lucro['scacougue'] += lucro
                                 somaexp = (20 + BDP.maisexp) * scqtdevendas
@@ -791,11 +901,13 @@ def scvendaacougue():
 def scvendapadaria():
     while True:
         sorteio = randint(0, 2)
-        qtdevendaslevel = BDP.habilidades['Habilidade de vendas'] * 1
-        precoreduzido = BDP.habilidades['Habilidade de reduzir preco'] * 0.50
-        lucromaior = BDP.habilidades['Habilidade de lucro'] * 2
+        qtdevendashab = BDP.habilidades['Habilidade de vendas'] * 1
+        qtdevendasatri = BDP.atributos['Atributo de vendas'] * 1
+        lucroatri = BDP.atributos['Atributo de lucro'] * 2
+        lucrohab = BDP.habilidades['Habilidade de lucro'] * 2
         scvendas = BDP.scqtdemoveispadaria['Caixa'] * 2
-        scqtdevendas = qtdevendaslevel + scvendas
+        qtdelucro = lucrohab + lucroatri
+        scqtdevendas = qtdevendashab + qtdevendasatri + scvendas
         if BDP.scqtdemoveispadaria['Caixa'] >= 1:
             if BDP.scqtdefuncoespadaria['Caixa'] >= 1:
                 if BDP.scqtdefuncoespadaria['Padeiro'] >= 1:
@@ -807,10 +919,10 @@ def scvendapadaria():
                             if BDP.scqtdeprodutopadaria[busca1] >= scqtdevendas:
                                 BDP.scqtdeprodutopadaria[busca1] -= scqtdevendas
                                 BDP.scqtdeprovendaspadaria[busca1] += scqtdevendas
-                                precov = (BDP.scprecopadariav[busca] + lucromaior) * scqtdevendas
+                                precov = (BDP.scprecopadariav[busca] + qtdelucro) * scqtdevendas
                                 BDP.dinheiro += precov
-                                npv = BDP.scprecopadariav[busca] + lucromaior
-                                npc = BDP.scprecopadariac[busca] - precoreduzido
+                                npv = BDP.scprecopadariav[busca] + qtdelucro
+                                npc = BDP.scprecopadariac[busca]
                                 lucro = (npv - npc) * scqtdevendas
                                 BDP.lucro['scpadaria'] += lucro
                                 somaexp = (20 + BDP.maisexp) * scqtdevendas
@@ -823,17 +935,17 @@ def scvendapadaria():
                                 scqtdevendas = BDP.scqtdeprodutopadaria[busca1]
                                 BDP.scqtdeprodutopadaria[busca1] -= scqtdevendas
                                 BDP.scqtdeprovendaspadaria[busca1] += scqtdevendas
-                                precov = (BDP.scprecopadariav[busca] + lucromaior) * scqtdevendas
+                                precov = (BDP.scprecopadariav[busca] + qtdelucro) * scqtdevendas
                                 BDP.dinheiro += precov
-                                npv = BDP.scprecopadariav[busca] + lucromaior
-                                npc = BDP.scprecopadariac[busca] - precoreduzido
+                                npv = BDP.scprecopadariav[busca] + qtdelucro
+                                npc = BDP.scprecopadariac[busca]
                                 lucro = (npv - npc) * scqtdevendas
                                 BDP.lucro['scpadaria'] += lucro
                                 somaexp = (20 + BDP.maisexp) * scqtdevendas
                                 BDP.nivel['qtdeexp'] += somaexp
-                                print('Voce vendeu {} {} por R${:.2f}'.format(scqtdevendas, busca1, precov))
-                                print('voce teve um lucro de R${:.2f}'.format(lucro))
-                                print('Voce ganhou {} exp'.format(somaexp))
+                                print('Você vendeu {} {} por R${:.2f}'.format(scqtdevendas, busca1, precov))
+                                print('você teve um lucro de R${:.2f}'.format(lucro))
+                                print('Você ganhou {} exp'.format(somaexp))
                                 sleep(4)
                         break
                 else:
@@ -856,11 +968,13 @@ def scvendapadaria():
 def scvendaeletronica():
     while True:
         sorteio = randint(0, 2)
-        qtdevendaslevel = BDP.habilidades['Habilidade de vendas'] * 1
-        precoreduzido = BDP.habilidades['Habilidade de reduzir preco'] * 0.50
-        lucromaior = BDP.habilidades['Habilidade de lucro'] * 2
+        qtdevendashab = BDP.habilidades['Habilidade de vendas'] * 1
+        qtdevendasatri = BDP.atributos['Atributo de vendas'] * 1
+        lucrohab = BDP.habilidades['Habilidade de lucro'] * 2
+        lucroatri = BDP.atributos['Atributo de lucro'] * 2
         scvenda = BDP.scqtdemoveiseletronica['Caixa'] * 2
-        scqtdevendas = qtdevendaslevel + scvenda
+        qtdelucro = lucrohab + lucroatri
+        scqtdevendas = qtdevendashab + qtdevendasatri + scvenda
         if BDP.scqtdemoveiseletronica['Caixa'] >= 1:
             if BDP.scqtdefuncoeseletronica['Caixa'] >= 1:
                 if BDP.scqtdefuncoeseletronica['Atendente'] >= 1:
@@ -872,10 +986,10 @@ def scvendaeletronica():
                             if BDP.scqtdeprodutoeletronica[busca1] >= scqtdevendas:
                                 BDP.scqtdeprodutoeletronica[busca1] -= scqtdevendas
                                 BDP.scqtdeprovendaseletronica[busca1] += scqtdevendas
-                                precov = (BDP.scprecoeletronicav[busca] + lucromaior) * scqtdevendas
+                                precov = (BDP.scprecoeletronicav[busca] + qtdelucro) * scqtdevendas
                                 BDP.dinheiro += precov
-                                npv = BDP.scprecoeletronicav[busca] + lucromaior
-                                npc = BDP.scprecoeletronicac[busca] - precoreduzido
+                                npv = BDP.scprecoeletronicav[busca] + qtdelucro
+                                npc = BDP.scprecoeletronicac[busca]
                                 lucro = (npv - npc) * scqtdevendas
                                 BDP.lucro['sclojaele'] += lucro
                                 somaexp = (20 + BDP.maisexp) * scqtdevendas
@@ -888,10 +1002,10 @@ def scvendaeletronica():
                                 scqtdevendas = BDP.scqtdeprodutoeletronica[busca1]
                                 BDP.scqtdeprodutoeletronica[busca1] -= scqtdevendas
                                 BDP.scqtdeprovendaseletronica[busca1] += scqtdevendas
-                                precov = (BDP.scprecoeletronicav[busca] + lucromaior) * scqtdevendas
+                                precov = (BDP.scprecoeletronicav[busca] + qtdelucro) * scqtdevendas
                                 BDP.dinheiro += precov
-                                npv = BDP.scprecoeletronicav[busca] + lucromaior
-                                npc = BDP.scprecoeletronicac[busca] - precoreduzido
+                                npv = BDP.scprecoeletronicav[busca] + qtdelucro
+                                npc = BDP.scprecoeletronicac[busca]
                                 lucro = (npv - npc) * scqtdevendas
                                 BDP.lucro['sclojaele'] += lucro
                                 somaexp = (20 + BDP.maisexp) * scqtdevendas
@@ -921,11 +1035,13 @@ def scvendaeletronica():
 def scvendasupermercado():
     while True:
         sorteio = randint(0, 2)
-        qtdevendaslevel = BDP.habilidades['Habilidade de vendas'] * 1
-        precoreduzido = BDP.habilidades['Habilidade de reduzir preco'] * 0.50
-        lucromaior = BDP.habilidades['Habilidade de lucro'] * 2
+        qtdevendashab = BDP.habilidades['Habilidade de vendas'] * 1
+        qtdevendasatri = BDP.atributos['Atributo de vendas'] * 1
+        lucrohab = BDP.habilidades['Habilidade de lucro'] * 2
+        lucroatri = BDP.atributos['Atributo de lucro'] * 2
         scvenda = BDP.scqtdemoveissupermercado['Caixa'] * 2
-        scqtdevendas = qtdevendaslevel + scvenda
+        qtdelucro = lucrohab + lucroatri
+        scqtdevendas = qtdevendashab + qtdevendasatri + scvenda
         if BDP.scqtdemoveissupermercado['Caixa'] >= 1:
             if BDP.scqtdefuncoessupermercado['Caixa'] >= 1:
                 if BDP.scqtdefuncoessupermercado['Repositor'] >= 1:
@@ -937,10 +1053,10 @@ def scvendasupermercado():
                             if BDP.scqtdeprodutosm[busca1] >= scqtdevendas:
                                 BDP.scqtdeprodutosm[busca1] -= scqtdevendas
                                 BDP.scqtdeprovendasupermercado[busca1] += scqtdevendas
-                                precov = (BDP.scprecovendasm[busca] + lucromaior) * scqtdevendas
+                                precov = (BDP.scprecovendasm[busca] + qtdelucro) * scqtdevendas
                                 BDP.dinheiro += precov
-                                npv = BDP.scprecovendasm[busca] + lucromaior
-                                npc = BDP.scprecocomprasm[busca] - precoreduzido
+                                npv = BDP.scprecocomprasm[busca] + qtdelucro
+                                npc = BDP.scprecovendasm[busca]
                                 lucro = (npv - npc) * scqtdevendas
                                 BDP.lucro['scsm'] += lucro
                                 somaexp = (20 + BDP.maisexp) * scqtdevendas
@@ -952,10 +1068,10 @@ def scvendasupermercado():
                             else:
                                 scqtdevendas = BDP.scqtdeprodutosm[busca1]
                                 BDP.scqtdeprovendasupermercado[busca1] += scqtdevendas
-                                precov = (BDP.scprecovendasm[busca] + lucromaior) * scqtdevendas
+                                precov = (BDP.scprecovendasm[busca] + qtdelucro) * scqtdevendas
                                 BDP.dinheiro += precov
-                                npv = BDP.scprecovendasm[busca] + lucromaior
-                                npc = BDP.scprecocomprasm[busca] - precoreduzido
+                                npv = BDP.scprecovendasm[busca] + qtdelucro
+                                npc = BDP.scprecocomprasm[busca]
                                 lucro = (npv - npc) * scqtdevendas
                                 BDP.lucro['scsm'] += lucro
                                 somaexp = (20 + BDP.maisexp) * scqtdevendas
@@ -1033,9 +1149,9 @@ def scdepositopadaria():
     prateleirag = BDP.scqtdemoveispadaria['PrateleiraG'] * BDP.sclimiteitensmoveispadaria[13]
     saidaprateleira = prateleirap + prateleiram + prateleirag
 
-    for i in BDP.scprodutospadaria:
-        busca = BDP.scprodutospadaria.index(i)
-        buscad = BDP.scprodutospadaria[busca]
+    for i in range(0, len(BDP.scprodutospadaria)):
+        buscaitem = BDP.scnpp.index(i)
+        buscad = BDP.scprodutospadaria[buscaitem]
 
         if BDP.scqtdeprodepositopadaria[buscad] >= 1:
             if 'Bolo' in buscad:
@@ -1049,7 +1165,7 @@ def scdepositopadaria():
                     BDP.scqtdeprodutopadaria[buscad] += BDP.scqtdeprodepositopadaria[buscad]
                     BDP.scqtdeprodepositopadaria[buscad] -= BDP.scqtdeprodepositopadaria[buscad]
 
-            elif buscad in 'Cuca' or buscad in 'Pao' or 'Rosquinha' in buscad:
+            elif 'Cuca' or 'Pao' or 'Rosquinha' in buscad:
                 produtosmesa = (BDP.scqtdeprodutopadaria['Cuca'] + BDP.scqtdeprodutopadaria['Pao'] +
                                 BDP.scqtdeprodutopadaria['Rosquinha'])
                 faltamesa = saidamesa - produtosmesa
@@ -1061,7 +1177,7 @@ def scdepositopadaria():
                     BDP.scqtdeprodutopadaria[buscad] += BDP.scqtdeprodepositopadaria[buscad]
                     BDP.scqtdeprodepositopadaria[buscad] -= BDP.scqtdeprodepositopadaria[buscad]
 
-            if buscad in 'Bolinho' or buscad in 'Coxinha' or buscad in 'Pao_de_queijo' or 'Pastel' in buscad:
+            if 'Bolinho' or 'Coxinha' or 'Pao_de_queijo' or 'Pastel' in buscad:
                 produtospasteleira = (BDP.scqtdeprodutopadaria['Bolinho'] + BDP.scqtdeprodutopadaria['Coxinha'] +
                                       BDP.scqtdeprodutopadaria['Pao_de_queijo'] + BDP.scqtdeprodutopadaria['Pastel'])
 
@@ -1074,7 +1190,7 @@ def scdepositopadaria():
                     BDP.scqtdeprodutopadaria[buscad] += BDP.scqtdeprodepositopadaria[buscad]
                     BDP.scqtdeprodepositopadaria[buscad] -= BDP.scqtdeprodepositopadaria[buscad]
 
-            if buscad in 'Bolacha' or 'Cafe' in buscad:
+            if 'Bolacha' or 'Cafe' in buscad:
                 produtosprateleira = BDP.scqtdeprodutopadaria['Bolacha'] + BDP.scqtdeprodutopadaria['Cafe']
                 faltaprateleira = saidaprateleira - produtosprateleira
                 if BDP.scqtdeprodepositopadaria[buscad] >= faltaprateleira:
@@ -1085,8 +1201,7 @@ def scdepositopadaria():
                     BDP.scqtdeprodutopadaria[buscad] += BDP.scqtdeprodepositopadaria[buscad]
                     BDP.scqtdeprodepositopadaria[buscad] -= BDP.scqtdeprodepositopadaria[buscad]
 
-            if (buscad in 'Leite' or buscad in 'Margarina' or buscad in 'Nata' or buscad in 'Presunto' or
-                    buscad in 'Queijo' or buscad in 'Sorvete' or 'Yogurt' in buscad):
+            if 'Leite' or 'Margarina' or 'Nata' or 'Presunto' or 'Queijo' or 'Sorvete' or 'Yogurt' in buscad:
                 produtosgeladeira = (BDP.scqtdeprodutopadaria['Leite'] + BDP.scqtdeprodutopadaria['Margarina'] +
                                      BDP.scqtdeprodutopadaria['Nata'] + BDP.scqtdeprodutopadaria['Presunto'] +
                                      BDP.scqtdeprodutopadaria['Queijo'] + BDP.scqtdeprodutopadaria['Sorvete'] +
@@ -1113,13 +1228,12 @@ def scdepositoeletronico():
     saidaprateleirag = BDP.sclimiteitensmoveiseletronica[6] * BDP.scqtdemoveiseletronica['PrateleiraG']
     saidaprateleira = saidaprateleirap + saidaprateleiram + saidaprateleirag
 
-    for i in BDP.scnpe:
-        buscaitem = BDP.scnpe.index(i)
+    for i in range(0, len(BDP.scnmoveise)):
+        buscaitem = BDP.scnpe.index()
         buscad = BDP.scprodutoseletronica[buscaitem]
 
         if BDP.scqtdeprodepositoeletronica[buscad] >= 1:
-            if (buscad in 'Celular' or buscad in 'Computador' or buscad in 'Notebook' or buscad in 'Tablet' or
-                    'Televisao' in buscad):
+            if 'Celular' or 'Computador' or 'Notebook' or 'Tablet' or 'Televisao' in buscad:
 
                 produtosmesa = (BDP.scqtdeprodutoeletronica['Celular'] + BDP.scqtdeprodutoeletronica['Computador'] +
                                 BDP.scqtdeprodutoeletronica['Notebook'] + BDP.scqtdeprodutoeletronica['Tablet'] +
@@ -1134,7 +1248,7 @@ def scdepositoeletronico():
                     BDP.scqtdeprodutoeletronica[buscad] += BDP.scqtdeprodepositoeletronica[buscad]
                     BDP.scqtdeprodepositoeletronica[buscad] -= BDP.scqtdeprodepositoeletronica[buscad]
 
-            elif buscad in 'Ipad' or buscad in 'Mouse' or 'Teclado' in buscad:
+            elif 'Ipad' or 'Mouse' or 'Teclado' in buscad:
                 produtosprateleira = (BDP.scqtdeprodutoeletronica['Ipad'] + BDP.scqtdeprodutoeletronica['Mouse'] +
                                       BDP.scqtdeprodutoeletronica['Teclado'])
                 faltaprateleira = saidaprateleira - produtosprateleira
@@ -1183,7 +1297,7 @@ def scdepositosupermercado():
                     BDP.scqtdeprodutosm[buscad] += BDP.scqtdeprodepositosm[buscad]
                     BDP.scqtdeprodepositosm[buscad] -= BDP.scqtdeprodepositosm[buscad]
 
-            if buscad in BDP.scprodutossupermercadolh or buscad in BDP.scprodutossupermercadog:
+            if BDP.scprodutossupermercadolh or BDP.scprodutossupermercadog in buscad:
                 faltaprateleira = saidaprateleira - somalhg
                 if BDP.scqtdeprodepositosm[buscad] >= faltaprateleira:
                     BDP.scqtdeprodutosm[buscad] += faltaprateleira
@@ -1247,6 +1361,9 @@ def sclojamoveis(buscatm1, buscanome1):
                     print('\033[31mErro:  \033[mOpção inválida, tente novamente')
 
         if compramoveis1 in 'C':
+            print(f'\rVoltando para {Nome_Mercado}...', end='')
+            print('')
+            sleep(10)
             break
 
         custol = tamanhofalta = espaco = 0
@@ -1282,11 +1399,14 @@ def sclojamoveis(buscatm1, buscanome1):
 
         qtdemaxima = BDP.dinheiro / custol
         qtdecompra = tamanhofalta / espaco
+
         while True:
-            if qtdemaxima < qtdecompra:
-                print('Compra máxima de {:.0f} unidade'.format(trunc(qtdemaxima)))
-            else:
+            if qtdecompra < qtdemaxima:
                 print('Compra máxima de {:.0f} unidade'.format(trunc(qtdecompra)))
+
+            else:
+                print('Compra máxima de {:.0f} unidade'.format(trunc(qtdemaxima)))
+
             quantimoveis1 = str(input('Quantidade de {}: '.format(busca1moveis)))
             numeric = quantimoveis1.isnumeric()
             strnumeric = str(numeric)
@@ -1338,23 +1458,22 @@ def scmercado(buscatm1, buscanome1):
         print('\033[34mMercado Do Zé:\033[m')
         print('==' * 10)
         sleep(1)
-        precoreduzido = BDP.habilidades['Habilidade de reduzir preco'] * 0.50
 
         if Tipo_Mercado in 'Acougue':
             for i in range(len(BDP.scprodutosacougue)):
-                print('[{}] {} R${}.'.format(i, BDP.scprodutosacougue[i], BDP.scprecoacouguec[i] - precoreduzido))
+                print('[{}] {} R${}.'.format(i, BDP.scprodutosacougue[i], BDP.scprecoacouguec[i]))
 
         elif Tipo_Mercado in 'Padaria':
             for i in range(len(BDP.scprodutospadaria)):
-                print('[{}] {} R${}.'.format(i, BDP.scprodutospadaria[i], BDP.scprecopadariac[i] - precoreduzido))
+                print('[{}] {} R${}.'.format(i, BDP.scprodutospadaria[i], BDP.scprecopadariac[i]))
 
         elif Tipo_Mercado in 'Loja de Eletronica':
             for i in range(len(BDP.scprodutoseletronica)):
-                print('[{}] {} R${}.'.format(i, BDP.scprodutoseletronica[i], BDP.scprecoeletronicac[i] - precoreduzido))
+                print('[{}] {} R${}.'.format(i, BDP.scprodutoseletronica[i], BDP.scprecoeletronicac[i]))
 
         elif Tipo_Mercado in 'SuperMercado':
             for i in range(len(BDP.scprodutossm)):
-                print('[{}] {} R${}.'.format(i, BDP.scprodutossm[i], BDP.scprecocomprasm[i] - precoreduzido))
+                print('[{}] {} R${}.'.format(i, BDP.scprodutossm[i], BDP.scprecocomprasm[i]))
 
         print('[C] Voltar.')
         custo = 0
@@ -1374,7 +1493,7 @@ def scmercado(buscatm1, buscanome1):
                                 BDP.scqtdemoveisacougue['FreezerG'] >= 1):
                             buscamercado = BDP.scnpa.index(compraproduto1)
                             buscaitem = BDP.scprodutosacougue[buscamercado]
-                            custo = BDP.scprecoacouguec[buscamercado] - precoreduzido
+                            custo = BDP.scprecoacouguec[buscamercado]
                             break
                         else:
                             print('\033[33mErro: \033[mVocê não tem um freezer.')
@@ -1394,7 +1513,7 @@ def scmercado(buscatm1, buscanome1):
                                 BDP.scqtdemoveispadaria['PasteleiraG'] >= 1):
                             buscamercado = BDP.scnpp.index(compraproduto1)
                             buscaitem = BDP.scprodutospadaria[buscamercado]
-                            custo = BDP.scprecopadariac[buscamercado] - precoreduzido
+                            custo = BDP.scprecopadariac[buscamercado]
                             break
                         else:
                             print('\033[33mErro: \033[mVocê não tem uma pasteleira.')
@@ -1405,7 +1524,7 @@ def scmercado(buscatm1, buscanome1):
                         if BDP.scqtdemoveispadaria['Boleira'] >= 1:
                             buscamercado = BDP.scnpp.index(compraproduto1)
                             buscaitem = BDP.scprodutospadaria[buscamercado]
-                            custo = BDP.scprecopadariac[buscamercado] - precoreduzido
+                            custo = BDP.scprecopadariac[buscamercado]
                             break
                         else:
                             print('\033[33mErro: \033[mVocê não tem uma boleira.')
@@ -1417,7 +1536,7 @@ def scmercado(buscatm1, buscanome1):
                                 BDP.scqtdemoveispadaria['PrateleiraG'] >= 1):
                             buscamercado = BDP.scnpp.index(compraproduto1)
                             buscaitem = BDP.scprodutospadaria[buscamercado]
-                            custo = BDP.scprecopadariac[buscamercado] - precoreduzido
+                            custo = BDP.scprecopadariac[buscamercado]
                             break
                         else:
                             print('\033[33mErro: \033[mVocê não tem uma prateleira.')
@@ -1429,7 +1548,7 @@ def scmercado(buscatm1, buscanome1):
                                 BDP.scqtdemoveispadaria['MesaG'] >= 1):
                             buscamercado = BDP.scnpp.index(compraproduto1)
                             buscaitem = BDP.scprodutospadaria[buscamercado]
-                            custo = BDP.scprecopadariac[buscamercado] - precoreduzido
+                            custo = BDP.scprecopadariac[buscamercado]
                             break
                         else:
                             print('\033[33mErro: \033[mVocê não tem uma mesa.')
@@ -1441,7 +1560,7 @@ def scmercado(buscatm1, buscanome1):
                                 BDP.scqtdemoveispadaria['GeladeiraG'] >= 1):
                             buscamercado = BDP.scnpp.index(compraproduto1)
                             buscaitem = BDP.scprodutospadaria[buscamercado]
-                            custo = BDP.scprecopadariac[buscamercado] - precoreduzido
+                            custo = BDP.scprecopadariac[buscamercado]
                             break
                         else:
                             print('\033[33mErro: \033[mVocê não tem uma geladeira.')
@@ -1458,7 +1577,7 @@ def scmercado(buscatm1, buscanome1):
                                 BDP.scqtdemoveiseletronica['MesaG'] >= 1):
                             busca = BDP.scnpe.index(compraproduto1)
                             buscaitem = BDP.scprodutoseletronica[busca]
-                            custo = BDP.scprecoeletronicac[busca] - precoreduzido
+                            custo = BDP.scprecoeletronicac[busca]
                             break
                         else:
                             print('\033[33mErro: \033[mVocê não tem uma mesa.')
@@ -1470,7 +1589,7 @@ def scmercado(buscatm1, buscanome1):
                                 BDP.scqtdemoveiseletronica['PrateleiraG'] >= 1):
                             busca = BDP.scnpe.index(compraproduto1)
                             buscaitem = BDP.scprodutoseletronica[busca]
-                            custo = BDP.scprecoeletronicac[busca] - precoreduzido
+                            custo = BDP.scprecoeletronicac[busca]
                             break
                         else:
                             print('\033[33mErro: \033[mVocê não tem uma prateleira.')
@@ -1485,7 +1604,7 @@ def scmercado(buscatm1, buscanome1):
                                 BDP.scqtdemoveissupermercado['FruteiraG'] >= 1):
                             busca = BDP.scnpsfv.index(compraproduto1)
                             buscaitem = BDP.scprodutossupermercadofv[busca]
-                            custo = BDP.scprecosupermercadocfv[busca] - precoreduzido
+                            custo = BDP.scprecosupermercadocfv[busca]
                             break
                         else:
                             print('\033[33mErro: \033[mVocê não tem uma fruteira.')
@@ -1500,7 +1619,7 @@ def scmercado(buscatm1, buscanome1):
                             precoprodutoslhg = BDP.scprecosupermercadoclh + BDP.scprecosupermercadocg
                             busca = nprodutoslhg.index(compraproduto1)
                             buscaitem = produtoslhg[busca]
-                            custo = precoprodutoslhg[busca] - precoreduzido
+                            custo = precoprodutoslhg[busca]
                             break
                         else:
                             print('\033[33mErro: \033[mVocê não tem uma prateleira.')
@@ -1508,6 +1627,10 @@ def scmercado(buscatm1, buscanome1):
                             sleep(3)
 
         if compraproduto1 in 'C':
+            BDP.itenscaminhao = 0
+            print(f'\rVoltando para {Nome_Mercado}...', end='')
+            print('')
+            sleep(10)
             break
 
         else:
@@ -1537,9 +1660,12 @@ def scmercado(buscatm1, buscanome1):
                 maxima = BDP.limiteevolucaoimovel['scsmd'] - qtdemaximaproduto
 
             qtdemaxima = BDP.dinheiro / custo
+            espacofalta = BDP.meucaminhao - BDP.itenscaminhao
             while True:
                 if qtdemaxima < maxima:
                     print('Compra máxima de {:.0f} unidade'.format(trunc(qtdemaxima)))
+                elif espacofalta < maxima or espacofalta < maxima:
+                    print('Compra máxima de {:.0f} unidade'.format(espacofalta))
                 else:
                     print('Compra máxima de {:.0f} unidade'.format(trunc(maxima)))
                 quantiproduto = str(input('Quantidade de {}: '.format(buscaitem)))
@@ -1556,6 +1682,10 @@ def scmercado(buscatm1, buscanome1):
                         print('\033[33mErro: \033[mDepósito cheio.')
                         sleep(1)
 
+                    elif quantiproduto > espacofalta:
+                        print('\033[33mErro: \033[mCaminhão cheio.')
+                        sleep(1)
+
                     elif quantiproduto < 0:
                         print('\033[31mErro:  \033[mOpção inválida, tente novamente')
 
@@ -1567,6 +1697,7 @@ def scmercado(buscatm1, buscanome1):
                             print('\033[33mErro: \033[mDinheiro insuficiente.')
                             sleep(1)
 
+            BDP.itenscaminhao += quantiproduto
             BDP.dinheiro -= valortotalpma
             print('No mercado, o produto {} custa R${} cada. totalizando R${:.2f} com {} unidades.'.format(
                 buscaitem, custo, valortotalpma, quantiproduto))
@@ -1601,6 +1732,8 @@ def scfuncionarios(buscatm1):
                 busca = BDP.nfuncionario.index(funcionario1)
                 busca0 = BDP.funcionario[busca]
                 valorf1 = BDP.precofuncionario[busca]
+
+                # Acougue
 
                 if Tipo_Mercado in 'Acougue':
                     if BDP.scqtdefuncionariosacougue[busca0] == 1:
@@ -1645,6 +1778,8 @@ def scfuncionarios(buscatm1):
                     sleep(3)
                     break
 
+                # Padaria
+
                 elif Tipo_Mercado in 'Padaria':
                     if BDP.scqtdefuncionariospadaria[busca0] == 1:
                         print('\033[33mErro: \033[mVocê já tem esse funcionário.')
@@ -1672,6 +1807,7 @@ def scfuncionarios(buscatm1):
                             if tecla == 1 or tecla == 0:
                                 funcao = BDP.scfuncoespadaria[tecla]
                                 if BDP.scqtdefuncoespadaria[funcao] == 0:
+                                    BDP.scqtdefuncoespadaria[funcao] += 1
                                     break
                                 else:
                                     print('\033[33mErro: \033[mSeu funcionário já tem essa função.')
@@ -1680,13 +1816,13 @@ def scfuncionarios(buscatm1):
                                 print('\033[31mErro:  \033[mOpção inválida, tente novamente')
                         else:
                             print('\033[31mErro:  \033[mOpção inválida, tente novamente')
-
-                    BDP.scqtdefuncoespadaria[funcao] += 1
                     BDP.scpadariapgmtfuntotal += valorf1
                     BDP.dinheiro -= valorf1
                     print(f'Você contratou o(a) {busca0} e a sua funcão é {funcao} e o seu sálario é de R${valorf1}.')
                     sleep(3)
                     break
+
+                # Eletronica
 
                 elif Tipo_Mercado in 'Loja de Eletronica':
                     if BDP.scqtdefuncionarioseletronica[busca0] == 1:
@@ -1715,6 +1851,7 @@ def scfuncionarios(buscatm1):
                             if tecla == 1 or tecla == 0:
                                 funcao = BDP.scfuncoeseletronica[tecla]
                                 if BDP.scqtdefuncoeseletronica[funcao] == 0:
+                                    BDP.scqtdefuncoeseletronica[funcao] += 1
                                     break
                                 else:
                                     print('\033[33mErro: \033[mSeu funcionário já tem essa função.')
@@ -1723,12 +1860,14 @@ def scfuncionarios(buscatm1):
                                 print('\033[31mErro:  \033[mOpção inválida, tente novamente')
                         else:
                             print('\033[31mErro:  \033[mOpção inválida, tente novamente')
-                    BDP.scqtdefuncoeseletronica[funcao] += 1
+
                     BDP.scelepgmtfuntotal += valorf1
                     BDP.dinheiro -= valorf1
                     print(f'Você contratou o(a) {busca0} e a sua funcão é {funcao} e o seu sálario é de R${valorf1}.')
                     sleep(3)
                     break
+
+                # Super Mercado
 
                 elif Tipo_Mercado in 'SuperMercado':
                     if BDP.scqtdefuncionariossupermercado[busca0] == 1:
@@ -1771,6 +1910,7 @@ def scfuncionarios(buscatm1):
                     print(f'Você contratou o(a) {busca0} e a sua funcão é {funcao} e o seu sálario é de R${valorf1}.')
                     sleep(3)
                     break
+
             else:
                 print('\033[31mErro:  \033[mOpção inválida, tente novamente')
 

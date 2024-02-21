@@ -24,4 +24,6 @@ Versão atual 2.1:
 	Sistema de Evolução:
 		Evoluir tamanho do Imóvel
 		Evoluir tamanho do Depósito
-	Sistema para mostrar informações do imóvel 
+	Sistema para mostrar informações do imóvel
+	Sistema de atributos
+	Sistema de compra de automóvel

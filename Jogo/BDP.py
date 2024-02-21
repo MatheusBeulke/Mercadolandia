@@ -1,20 +1,31 @@
 # Versão 2.1
 
-habilidades = {'Habilidade de vendas': 0, 'Habilidade de reduzir preco': 0, 'Habilidade de lucro': 0,
-               'Habilidade de ganhar mais exp': 0}
-precohabilidade = {'precohavendas': 5, 'precohapreco': 5, 'precohalucro': 5, 'precohaexp': 5}
-levelmaximohabi = {'lvhv': 10, 'lvhp': 5, 'lvhl': 10, 'lvhe': 10}
-maisexp = 0
+habilidades = {'Habilidade de vendas': 0, 'Habilidade de lucro': 0, 'Habilidade de ganhar mais exp': 0}
+precohabilidade = {'precohavendas': 5, 'precohalucro': 5, 'precohaexp': 5}
+levelmaximohabi = {'lvhv': 10, 'lvhl': 10, 'lvhe': 10}
 
-dinheiro = 8000
+atributos = {'Atributo de vendas': 0, 'Atributo de lucro': 0, 'Atributo de exp': 0,
+             'Atributo level maximo ha': 0}
+precoatributo = {'precoatvendas': 1, 'precoatlucro': 1, 'precoatexp': 1, 'precoatlv': 1}
+
+maisexp = 0
+dinheiro = 5700
 diamante = 0
+qtdeatributos = 50
 nivel = {'level': 1, 'qtdeexp': 0, 'uplevel': 3000}
+meucaminhao = 50
+itenscaminhao = 0
+
+ncaminhao = ['0', '1', '2']
+caminhao = [['CaminhaoP', 100, 1000], ['CaminhaoM', 250, 2000], ['CaminhaoG', 400, 3000]]
+qtdecaminhao = {'Caminhonete': 1, 'CaminhaoP': 0, 'CaminhaoM': 0, 'CaminhaoG': 0}
+
 
 nmapa = ['0']
 mapa = ['Santa Catarina']
 ntipo_de_mercado = ['0', '1', '2', '3']
 tipo_de_mercado = ['Acougue', 'Padaria', 'Loja de Eletronica', 'SuperMercado']
-preco_mercado = [4000, 2000, 5000, 3000]
+preco_mercado = [4000, 3000, 5000, 2000]
 SCSPTipos_Deposito_Informacoes = []
 SCSPTipos_Mercado_Informacoes = []
 lvevolucaoimovel = {'scacougued': 1, 'scacougue': 1, 'scpadariad': 1, 'scpadaria': 1, 'sclojaeled': 1, 'sclojaele': 1,
