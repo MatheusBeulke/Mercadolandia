@@ -1,12 +1,10 @@
 from time import sleep
 import BDP
-from Versao2_2.Jogo_2_2 import ComprarInicial
 from math import trunc
 from random import randint, choice
 
 
 def boasvinda():
-
     print('Bem-Vindo ao Mercadolândia')
     JogoInicio()
 
